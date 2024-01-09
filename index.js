@@ -4,6 +4,7 @@ import dbConnection from "./helper/dbConnection.js";
 import AuthRoute from "./routes/auth.route.js";
 import BlogRoute from "./routes/blog.route.js";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
 
 const app = express();
 app.use(cookieParser());
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
