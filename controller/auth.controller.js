@@ -82,7 +82,11 @@ export async function logIn(req, res) {
             },
             process.env.JWT_TOKEN
           );
-          res.cookie("access_token", token);
+          res.cookie("access_token", token, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+          });
           res.json({
             message: "Log In Successfully",
           });
