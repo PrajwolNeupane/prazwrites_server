@@ -2,10 +2,11 @@ import Blog from "../modal/blog.modal.js";
 
 export async function getAllBlogs(req, res) {
   try {
-    let limit = req.query.blogs ? parseInt(req.query.blogs) : 8;
+    let limit = req.query.blogs ? parseInt(req.query.blogs) : 6;
+    let skip = req.query.page ? parseInt(req.query.page) * limit : 0;
     if (limit > 0) {
       const [blogs, totalBlogs] = await Promise.all([
-        Blog.find().sort({ createdAt: -1 }).limit(limit),
+        Blog.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
         Blog.countDocuments(),
       ]);
       res.json({ blogs, totalBlogs });
