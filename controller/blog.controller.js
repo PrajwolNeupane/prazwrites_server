@@ -2,8 +2,14 @@ import Blog from "../modal/blog.modal.js";
 
 export async function getAllBlogs(req, res) {
   try {
-    var blog = await Blog.find().sort({ createdAt: -1 });
-    res.json(blog);
+    let limit = req.query.blogs ? parseInt(req.query.blogs) : 8;
+    if (limit > 0) {
+      const [blogs, totalBlogs] = await Promise.all([
+        Blog.find().sort({ createdAt: -1 }).limit(limit),
+        Blog.countDocuments(),
+      ]);
+      res.json({ blogs, totalBlogs });
+    }
   } catch (e) {
     res.status(500).json({
       message: "Cannot get all blogs",
@@ -60,7 +66,7 @@ export async function getBlogsByCategory(req, res) {
     } else {
       return res.status(200).json({
         message: "Blog not found",
-        blogs:[]
+        blogs: [],
       });
     }
   } catch (e) {
